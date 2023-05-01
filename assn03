@@ -1,0 +1,28 @@
+BIOL5153, Spring 2023
+
+
+#!/bin/bash
+
+#SBATCH --job-name=assn03
+#SBATCH --partition comp72
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=1
+#SBATCH --time=00:01:00
+#SBATCH -o %assn03.out
+#SBATCH -e %assn03.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=jdtalley@uark.edu{.email}
+
+cd \$SLURM_SUBMIT_DIR
+
+# job command 
+module purge
+module load blast cat
+mt_genomes/\*.fasta \> mt_genomes/genomes.fas makeblastdb -in mt_genomes/genomes.fas -dbtype nucl
+blastn -query mt_genomes/unknown.fa -db mt_genomes/genomes.fas \> mt_genomes/unknown.vs.genomes.blastn
+
+This command syncs the changes made to the mt_genomes folder on the server with the mt_genomes directory on my local computer (this command is run from the directory on my local computer that contains the local copy of mt_genomes): rsync -avz fuccello@hpc-portal2.hpc.uark.edu:/storage/fuccello/mt_genomes .
+
+Q5:
+My job took 00:00:03.
+The closest match = Cucurbita.
